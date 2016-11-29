@@ -5,6 +5,12 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { APP_CONFIG } from '../config/routes';
+import { TestService } from '../providers/test-service';
+import { ConfigurationModule, ConfigToken, EnvToken } from '@ramonornela/configuration';
+import { UrlResolverModule } from '@ramonornela/url-resolver';
+import { HttpModule, DefaultPlugins } from '@ramonornela/http';
+import { HttpPluginsIonicModule } from '@ramonornela/http-plugins-ionic';
 
 @NgModule({
   declarations: [
@@ -15,9 +21,13 @@ import { TabsPage } from '../pages/tabs/tabs';
     TabsPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    ConfigurationModule,
+    UrlResolverModule.initialize(),
+    HttpModule.initialize(DefaultPlugins),
+    HttpPluginsIonicModule
   ],
-  bootstrap: [IonicApp],
+  bootstrap: [ IonicApp ],
   entryComponents: [
     MyApp,
     AboutPage,
@@ -25,6 +35,11 @@ import { TabsPage } from '../pages/tabs/tabs';
     HomePage,
     TabsPage
   ],
-  providers: []
+  providers: [
+    { provide: EnvToken, useValue: 'dev' },
+    { provide: ConfigToken, useValue: APP_CONFIG },
+    TestService
+  ]
 })
-export class AppModule {}
+export class AppModule {
+}
